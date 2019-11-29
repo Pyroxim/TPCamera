@@ -405,7 +405,7 @@
       </screenshot>
     </screenshots>
     <releases>
-      <release version="23"/>
+      <release version="24"/>
     </releases>
     <metadata>
       <value key="GnomeSoftware::OriginHostnameUrl">https://extensions.gnome.org/</value>
@@ -5229,7 +5229,7 @@
     <id>azan_faissal.bensefia.id</id>
     <name>Azan Islamic Prayer Times</name>
     <summary>GNOME Shell Extension</summary>
-    <description><p>Azan is an Islamic prayer times extension for Gnome Shell based on the extension by Fahrinh.</p><p>Features - List compulsory prayer times  Optionally display Imsak, Sunrise, Sunset and Midnight - Show remaining time for the upcoming prayer. - Show current date in Hijri calendar. - Display a notification when it&apos;s time for prayer. - Automatic Geoclue2 location detection - Show times in 24 hour and 12 hour formats</p><p>Known bugs: - If Isha is after 00:00 the next prayer will be shown to be Fajir</p></description>
+    <description><p>Azan is an Islamic prayer times extension for Gnome Shell based on the extension by Fahrinh.</p><p>Features - List compulsory prayer times  Optionally display Imsak, Sunrise, Sunset and Midnight - Show remaining time for the upcoming prayer. - Show current date in Hijri calendar. - Display a notification when it&apos;s time for prayer. - Automatic Geoclue2 location detection - Show times in 24 hour and 12 hour formats</p></description>
     <icon type="stock">application-x-addon-symbolic</icon>
     <categories>
       <category>Addons</category>
@@ -7004,7 +7004,7 @@
       </screenshot>
     </screenshots>
     <releases>
-      <release version="25"/>
+      <release version="26"/>
     </releases>
     <metadata>
       <value key="GnomeSoftware::OriginHostnameUrl">https://extensions.gnome.org/</value>
@@ -8130,7 +8130,7 @@
     <id>drop-down-terminal-x_bigbn.pro</id>
     <name>Drop Down Terminal X</name>
     <summary>GNOME Shell Extension</summary>
-    <description><p>A GNOME Shell drop down terminal with extra feautures. Includes: tabs, multi-monitor, font scaling support; [Focus out] / [Escape pressed] events for hide.</p><p>Special thanks to: - Balder Claassen (https://github.com/balderclaassen) - Adrien Pyke (https://github.com/kufii) - Alan J Carvajal (https://github.com/ajcarvajal) - Massimo Mund (https://github.com/masmu) - Jakub Żywiec (https://github.com/jakubzet) - Mattias Eriksson (https://github.com/snaggen) for active contribution.</p><p>Based on original extension &quot;gs-extensions-drop-down-terminal&quot; from Stéphane Démurget (https://github.com/zzrough)</p></description>
+    <description><p>A GNOME Shell drop down terminal with extra feautures.  Includes: tabs, multi-monitor, font scaling support; [Focus out] / [Escape pressed] events for hide.</p><p>November 2019 updates includes:   - Added support for the ~/.ssh/config file.     Now you can get quick access to any your ssh host in one click;    - Added support for ~/.config/drop-down-terminal-x/shortcuts file      Now you can define any action that will become available in a special drop-down list for quick launch.      This small improvement can improve your productivity      See file format at https://github.com/bigbn/drop-down-terminal-x   - Added option to prevent terminal jumps down to the bottom on long command output </p><p>Special thanks to: - Balder Claassen (https://github.com/balderclaassen) - Adrien Pyke (https://github.com/kufii) - Alan J Carvajal (https://github.com/ajcarvajal) - Massimo Mund (https://github.com/masmu) - Jakub Żywiec (https://github.com/jakubzet) - Mattias Eriksson (https://github.com/snaggen) for active contribution.</p><p>Based on original extension &quot;gs-extensions-drop-down-terminal&quot; from Stéphane Démurget (https://github.com/zzrough)</p></description>
     <icon type="stock">application-x-addon-symbolic</icon>
     <categories>
       <category>Addons</category>
@@ -9941,6 +9941,9 @@
         <image type="source">https://extensions.gnome.org/extension-data/screenshots/screenshot_1488.png</image>
       </screenshot>
     </screenshots>
+    <releases>
+      <release version="2"/>
+    </releases>
     <metadata>
       <value key="GnomeSoftware::OriginHostnameUrl">https://extensions.gnome.org/</value>
       <value key="GnomeSoftware::Plugin">shell-extensions</value>
@@ -14940,7 +14943,7 @@
       </screenshot>
     </screenshots>
     <releases>
-      <release version="38"/>
+      <release version="40"/>
     </releases>
     <metadata>
       <value key="GnomeSoftware::OriginHostnameUrl">https://extensions.gnome.org/</value>
@@ -16221,9 +16224,12 @@
     <url type="homepage">https://extensions.gnome.org/extension/1275/prime-indicator/</url>
     <screenshots>
       <screenshot type="default">
-        <image type="source">https://extensions.gnome.org/extension-data/screenshots/screenshot_1275.png</image>
+        <image type="source">https://extensions.gnome.org/extension-data/screenshots/screenshot_1275_tXi6fyD.png</image>
       </screenshot>
     </screenshots>
+    <releases>
+      <release version="2"/>
+    </releases>
     <metadata>
       <value key="GnomeSoftware::OriginHostnameUrl">https://extensions.gnome.org/</value>
       <value key="GnomeSoftware::Plugin">shell-extensions</value>
@@ -17496,7 +17502,7 @@
     <id>run-or-raise_edvard.cz</id>
     <name>Run or raise</name>
     <summary>GNOME Shell Extension</summary>
-    <description><p>Launch or focus the window or define custom shortcuts in a text file</p></description>
+    <description><p>Launch or focus the window or define custom shortcuts in a text file I welcome issues in the issue tracker at the homepage.</p></description>
     <icon type="stock">application-x-addon-symbolic</icon>
     <categories>
       <category>Addons</category>
@@ -18589,7 +18595,7 @@
       </screenshot>
     </screenshots>
     <releases>
-      <release version="16"/>
+      <release version="17"/>
     </releases>
     <metadata>
       <value key="GnomeSoftware::OriginHostnameUrl">https://extensions.gnome.org/</value>

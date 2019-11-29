@@ -3,8 +3,8 @@ session_start();
 
 require('model.php');
 
-$adresse = "192.168.64.107";
-$port = 65535;
+$adresse = "192.168.64.99";
+$port = 9213;
 
 if(!isset($_SESSION['login']))
 {
@@ -78,7 +78,7 @@ $user->socket($adresse, $port);
 
 		<table> Déplacement
       	<tr>
-			<td with="50px" ></td><td><button onclick=""> ↑ </button></td></tr>
+			<td with="50px" ></td><td><button onclick="<?php sendMsg("haut"); ?>"> ↑ </button></td></tr>
 			<tr><td><button onclick="" > ← </button></td>	<td><button onclick="" > STOP </button></td>	<td><button onclick=""> → </button></td></tr>
 			<tr><td with="50px" ></td><td><button onclick=""> ↓ </button></td>
 		</tr>
@@ -102,11 +102,11 @@ $user->socket($adresse, $port);
 		</tr>
 		</table>
 		
-		<?php function runMyFunction() {
+		<?php function send() {
 			echo 'I just ran a php function';
 		}
 		?>
-		<button onclick="send()"> 
+		<button onclick=send()> oui </button>
 
 		<div>
 			<?php			
