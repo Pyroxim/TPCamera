@@ -21,22 +21,23 @@ $user->Connexion();
 <!DOCTYPE HTML>
 <html lang="fr">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+  <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+            <script src="dist/js/bootstrap.min.js"></script>
+            
+            <link href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.min.css" rel="stylesheet" />
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"></script>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+            <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 
-    <link href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+            <link href="css/bootstrap.min.css" rel="stylesheet">
+            <link href="css/sticky-footer-navbar.css" rel="stylesheet">
+            <link href="test.css" rel="stylesheet"/>
+            <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" 
+            integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin=""/>
+            <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+            integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==" crossorigin=""></script>
 
-	  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-	  <script src="http://code.highcharts.com/highcharts.js"></script>
-	  <script src="http://code.highcharts.com/modules/exporting.js"></script>
-	  <script type="text/javascript" src="data.js" ></script> <!-- Fichier JavaScript comportant le graphique -->
-	  <script src="assets/js/vendor/popper.min.js"></script>
-    <script src="dist/js/bootstrap.min.js"></script>
 
     <title>BIG EYE</title>
 
@@ -120,37 +121,39 @@ $user->Connexion();
 			
 
             <table class="table table-bordered">
-                    <tr>
+                <tr>
+                    <th><form method="GET"><input type="hidden" name="champ" value="nom"><p>Nom <input name="recherche" type="text" id="recherchenom" placeholder="recherche" onkeydown="if(keyCode==13){this.form.submit();return false;}"/></p></form> 
+                    	<script> $('#recherchenom').autocomplete({source: <?php $user->filtre("nom", $nom_table);?>});</script>
+                    </th>
 
-                      <th><form method="GET"><input type="hidden" name="champ" value="nom"><p>Nom <input name="recherche" type="text" id="recherchenom" placeholder="recherche" onkeydown="if(keyCode==13){this.form.submit();return false;}"/></p></form> 
-                        <script> $('#recherchenom').autocomplete({source: <?php $user->filtre("nom", $nom_table);?>});</script>
-                      </th>
-                      <th><form method="GET"><input type="hidden" name="champ" value="prenom"><p>Prenom<input type="text" name="recherche" id="rechercheprenom" placeholder="recherche" onkeydown="if(keyCode==13){this.form.submit();return false;}"/></p></form>
+                    <th><form method="GET"><input type="hidden" name="champ" value="prenom"><p>Prenom<input type="text" name="recherche" id="rechercheprenom" placeholder="recherche" onkeydown="if(keyCode==13){this.form.submit();return false;}"/></p></form>
                       <script> $('#rechercheprenom').autocomplete({source: <?php $user->filtre("prenom", $nom_table);?>});</script>
-                      </th>
-                      <th><form method="GET"><input type="hidden" name="champ" value="login"><p>Login<input type="text" name="recherche" id="recherchelogin" placeholder="recherche" onkeydown="if(keyCode==13){this.form.submit();return false;}"/></p></form>
-                        <script> $('#recherchelogin').autocomplete({source: <?php $user->filtre("login", $nom_table);?>});</script>
-                      </th>
-                      <th><form method="GET"><input type="hidden" name="champ" value="password"><p>Password<input type="text" name="recherche" id="recherchepassword" placeholder="recherche" onkeydown="if(keyCode==13){this.form.submit();return false;}"/></p></form>
-                        <script> $('#recherchepassword').autocomplete({source: <?php $user->filtre("password", $nom_table);?>});</script>
-                      </th>
-                      <th><form method="GET"><input type="hidden" name="champ" value="admin"><p>Admin<input type="text" name="recherche" id="rechercheadmin" placeholder="recherche" onkeydown="if(keyCode==13){this.form.submit();return false;}"/></p></form>
-                        <script> $('#rechercheadmin').autocomplete({source: <?php $user->filtre("admin", $nom_table);?>});</script>
-                      </th>
-					  <th> Supprimer </th>
-                    </tr>
-            <tr>
-            
-            <?php while($row = $req->fetch()) { ?>
-				 
-				        <td><?php echo $row['nom'];?> </td>
-                <td><?php echo $row['prenom']; ?></td>
-                <td><?php echo $row['login']; ?></td>
-                <td><?php echo $row['password'];?></td>
-                <td><?php echo $row['admin']; ?></td>
-				<td><form method="POST"><input type="hidden" name="param" value="<?= $row['login']; ?>"><button class="btn btn-primary" role="button" name="suppr"> Supprimer</button></form> </td>
+                    </th>
 
-            </tr>
+                    <th><form method="GET"><input type="hidden" name="champ" value="login"><p>Login<input type="text" name="recherche" id="recherchelogin" placeholder="recherche" onkeydown="if(keyCode==13){this.form.submit();return false;}"/></p></form>
+                        <script> $('#recherchelogin').autocomplete({source: <?php $user->filtre("login", $nom_table);?>});</script>
+                    </th>
+                    
+					<th><form method="GET"><input type="hidden" name="champ" value="password"><p>Password<input type="text" name="recherche" id="recherchepassword" placeholder="recherche" onkeydown="if(keyCode==13){this.form.submit();return false;}"/></p></form>
+                        <script> $('#recherchepassword').autocomplete({source: <?php $user->filtre("password", $nom_table);?>});</script>
+                    </th>
+                    
+					<th><form method="GET"><input type="hidden" name="champ" value="admin"><p>Admin<input type="text" name="recherche" id="rechercheadmin" placeholder="recherche" onkeydown="if(keyCode==13){this.form.submit();return false;}"/></p></form>
+                        <script> $('#rechercheadmin').autocomplete({source: <?php $user->filtre("admin", $nom_table);?>});</script>
+                    </th>
+					
+					<th> Supprimer </th>
+                </tr>
+            
+				<tr>
+            	<?php while($row = $req->fetch()) { ?>
+					<td><?php echo $row['nom'];?> </td>
+                	<td><?php echo $row['prenom']; ?></td>
+                	<td><?php echo $row['login']; ?></td>
+                	<td><?php echo $row['password'];?></td>
+                	<td><?php echo $row['admin']; ?></td>
+					<td><form method="POST"><input type="hidden" name="param" value="<?= $row['login']; ?>"><button class="btn btn-primary" role="button" name="suppr"> Supprimer</button></form> </td>
+				</tr>
             <?php }    
             $req->closeCursor();    
             ?> 

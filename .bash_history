@@ -14,3 +14,6 @@ ip -a
 ip a
 ip q
 ip a
+su root
+exit
+su root

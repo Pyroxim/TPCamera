@@ -10,6 +10,7 @@ class utilisateur
 	private $_mail;
 	private $_admin;
 	private $_bdd = null;
+	private $_nom_table;
 
 
 	//Constructeur
@@ -108,6 +109,13 @@ class utilisateur
 		$this->_prenom = $prenom;
 		$this->_mail = $mail;
 	}
+
+	public function supprimer($login)
+	{
+		$sql =  $this->_bdd->prepare ('DELETE FROM `user` WHERE login = "'.$login.'" ');
+
+		$sql->execute();
+	}
 	
 	public function filtre($nom_colonne,$nom_table)	//Va chercher en BDD tous les éléments d'une colonne qui contiennent le mot précisé dans le champ du filtre
 	{
@@ -132,19 +140,38 @@ class utilisateur
 		echo json_encode($array);
 	}
 
-	public function supprimer($login)
+	public function SetNomTable($nom_table)
 	{
-		$sql =  $this->_bdd->prepare ('DELETE FROM `user` WHERE login = "'.$login.'" ');
+		$this->_nom_table = $nom_table;
+	}
 
-		$sql->execute();
+	public function generateTab()
+	{
+		//$nbargs = func_num_args();
+
+		foreach(func_get_args() as $value)
+		{
+			echo '<th>
+			<form method="GET"><input type="hidden" name="champ" value="'.$value.'">
+				<p>'.$value.'
+					<input name="recherche" type="text" id="recherche'.$value.'" placeholder="recherche" onkeydown="if(keyCode==13){this.form.submit();return false;}"/>
+				</p>
+			</form> 
+			<script> 
+				$("#recherche'.$value.'").autocomplete({source: "'.$this->filtre($value, $this->_nom_table).'"});
+			</script>
+		</th>';	
+		}
 	}
 	
 	public function socket($ip, $port)
 	{
 		echo "Création socket...<br>";
 
-		$socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-		
+		$socket = socket_create(AF_INET, SOCK_STREAM, '0');
+		//$sourceip['Serve'] = '192.168.64.99';
+		//socket_bind($socket, $sourceip['Serve']);
+	
 		if($socket == false)
 		{
 			echo "création du socket échouée :" . socket_strerror(socket_last_error()) . "<br>";
@@ -165,8 +192,21 @@ class utilisateur
 			$out = socket_read($socket, 200, PHP_BINARY_READ);
 
 			echo $out;
-			echo "<br";
+			echo "<br>";
 		}
 	}
+
+	public function sendMsg($message)
+	{
+		try
+		{
+			socket_write($socket, $message, strlen($message));	
+		}
+		catch(Exception $e)
+		{
+			die($e->getMessage());
+		}
+	}
+	
 
 }
