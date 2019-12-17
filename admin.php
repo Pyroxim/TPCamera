@@ -12,9 +12,12 @@ if(!isset($_SESSION['admin']))
   header("Location: accueil.php");
 }
 
-$user = new utilisateur($_SESSION['login'], $_SESSION['passwd']);
+$SQL_DSN = "mysql:host=192.168.64.227;dbname=TPCamera";
+$SQL_USERNAME ="root";
+$SQL_PASSWORD = "root";
 
-$user->Connexion();
+$user = new utilisateur($_SESSION['login'], $_SESSION['passwd']);
+$user->Connexion($SQL_DSN, $SQL_USERNAME, $SQL_PASSWORD);
 
 ?>
 
@@ -122,25 +125,10 @@ $user->Connexion();
 
             <table class="table table-bordered">
                 <tr>
-                    <th><form method="GET"><input type="hidden" name="champ" value="nom"><p>Nom <input name="recherche" type="text" id="recherchenom" placeholder="recherche" onkeydown="if(keyCode==13){this.form.submit();return false;}"/></p></form> 
-                    	<script> $('#recherchenom').autocomplete({source: <?php $user->filtre("nom", $nom_table);?>});</script>
-                    </th>
-
-                    <th><form method="GET"><input type="hidden" name="champ" value="prenom"><p>Prenom<input type="text" name="recherche" id="rechercheprenom" placeholder="recherche" onkeydown="if(keyCode==13){this.form.submit();return false;}"/></p></form>
-                      <script> $('#rechercheprenom').autocomplete({source: <?php $user->filtre("prenom", $nom_table);?>});</script>
-                    </th>
-
-                    <th><form method="GET"><input type="hidden" name="champ" value="login"><p>Login<input type="text" name="recherche" id="recherchelogin" placeholder="recherche" onkeydown="if(keyCode==13){this.form.submit();return false;}"/></p></form>
-                        <script> $('#recherchelogin').autocomplete({source: <?php $user->filtre("login", $nom_table);?>});</script>
-                    </th>
-                    
-					<th><form method="GET"><input type="hidden" name="champ" value="password"><p>Password<input type="text" name="recherche" id="recherchepassword" placeholder="recherche" onkeydown="if(keyCode==13){this.form.submit();return false;}"/></p></form>
-                        <script> $('#recherchepassword').autocomplete({source: <?php $user->filtre("password", $nom_table);?>});</script>
-                    </th>
-                    
-					<th><form method="GET"><input type="hidden" name="champ" value="admin"><p>Admin<input type="text" name="recherche" id="rechercheadmin" placeholder="recherche" onkeydown="if(keyCode==13){this.form.submit();return false;}"/></p></form>
-                        <script> $('#rechercheadmin').autocomplete({source: <?php $user->filtre("admin", $nom_table);?>});</script>
-                    </th>
+					<?php 
+					$user->SetNomTable($nom_table);
+					$user->generateTab('nom','prenom','login','password','admin');
+					?>	
 					
 					<th> Supprimer </th>
                 </tr>
