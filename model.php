@@ -7,10 +7,10 @@ class utilisateur
 	private $_passwd;
 	private $_nom;
 	private $_prenom;
-	private $_mail;
 	private $_admin;
 	private $_bdd = null;
 	private $_nom_table;
+	private $_socket;
 
 
 	//Constructeur
@@ -64,11 +64,11 @@ class utilisateur
         }
 	}
 
-	public function Connexion()		//Connexion à la BDD
+	public function Connexion($SQL_DSN, $SQL_USERNAME, $SQL_PASSWORD)		//Connexion à la BDD
 	{
 	    try
 		{
-			$this->_bdd = new PDO('mysql:host=192.168.64.227;dbname=TPCamera;charset=utf8', 'root', 'root');
+			$this->_bdd = new PDO($SQL_DSN, $SQL_USERNAME, $SQL_PASSWORD);
 		}
 
     	catch (Exception $e)
@@ -97,18 +97,6 @@ class utilisateur
 
         $req->execute();
 	}
-	
-	public function modificationUser($login, $nom, $prenom, $mail, $passwd)		//Modifie les informations d'un user en BDD, selon son login
-	{
-		$req = $this->_bdd->prepare('UPDATE `user` SET `nom` = "'.$nom.'", `prenom` = "'.$prenom.'", `mail` = "'.$mail.'", `password` = "'.$passwd.'" WHERE `login` = "'.$login.'" ');
-		
-		$req->execute();
-		
-		$this->_passwd = $passwd;
-		$this->_nom = $nom;
-		$this->_prenom = $prenom;
-		$this->_mail = $mail;
-	}
 
 	public function supprimer($login)
 	{
@@ -117,40 +105,46 @@ class utilisateur
 		$sql->execute();
 	}
 	
-	public function filtre($nom_colonne,$nom_table)	//Va chercher en BDD tous les éléments d'une colonne qui contiennent le mot précisé dans le champ du filtre
+	public function filter($nom_colonne,$nom_table)	//Fetch in DB all the elements of a column that contain the word specified in the filter field
 	{
-        if(!isset ($_GET['term']))
+		//$_GET['term'] is a global value, which designates any variable in the array $_GET
+        if(!isset ($_GET['term']))	//So if there is no $_GET variable, it means that we have no filter entered
         {
-            $_GET['term'] = "";
+            $_GET['term'] = ""; 
         }
 		
 		$term = $_GET['term'];
 
+		//We prepare SQL request who selected in the good column in the good array all the values who match with who is register in field
     	$requete = $this->_bdd->prepare('SELECT DISTINCT '.$nom_colonne.' FROM '.$nom_table.' WHERE '.$nom_colonne.' LIKE :term ORDER BY '.$nom_colonne.' ASC');
 
+		//We execute the request by replacing ":term" by the value register in the field
 		$requete->execute(array('term' => '%'.$term.'%'));
 
 		$array = array();
 
+		//We retrieved in $donnee the result of request
 		while($donnee = $requete->fetch())
 		{
-			array_push($array, $donnee[$nom_colonne]);
+			array_push($array, $donnee[$nom_colonne]);	//For each value we have retrieved, we include it in the array $array
 		}
 
-		echo json_encode($array);
+		return $source = json_encode($array);	//We return the PHP array got in a JSON variable, because this value is used in a script
 	}
 
-	public function SetNomTable($nom_table)
+	public function SetNomTable($nom_table)	//Attribue un nom de table pour la fonction generateTab()
 	{
 		$this->_nom_table = $nom_table;
 	}
 
-	public function generateTab()
+	public function generateTab()	//Affiche le tableau, selon le nom de la table et le nom des colonnes spécifiées lors de l'appel de la fonction
 	{
-		//$nbargs = func_num_args();
-
-		foreach(func_get_args() as $value)
+		//La fonction n'a pas de paramètres, car le nombre de paramètres est variable, chaque tableau n'a pas le même nombre de colonnes.
+		foreach(func_get_args() as $value)	//On peut récupérer les paramètres grâce à func_get_args(), et on crée une case de tableau pour chaque colonne qu'on a en base de donné
 		{
+			//on crée un en tête de tableau avec un champ pour l'ecriture 
+			//la fonction onkeydown permet a l'appuie sur la touche entré d'appliquer le filtre sur le tableau
+			//la fonction autocomplete de jQuery permet de proposer une liste de mot contenue dans source :
 			echo '<th>
 			<form method="GET"><input type="hidden" name="champ" value="'.$value.'">
 				<p>'.$value.'
@@ -158,7 +152,7 @@ class utilisateur
 				</p>
 			</form> 
 			<script> 
-				$("#recherche'.$value.'").autocomplete({source: "'.$this->filtre($value, $this->_nom_table).'"});
+				$("#recherche'.$value.'").autocomplete({source: '.$this->filter($value, $this->_nom_table).'}); 
 			</script>
 		</th>';	
 		}
@@ -166,47 +160,31 @@ class utilisateur
 	
 	public function socket($ip, $port)
 	{
-		echo "Création socket...<br>";
-
-		$socket = socket_create(AF_INET, SOCK_STREAM, '0');
+		$this->_socket = socket_create(AF_INET, SOCK_STREAM, 0);
 		//$sourceip['Serve'] = '192.168.64.99';
 		//socket_bind($socket, $sourceip['Serve']);
-	
-		if($socket == false)
-		{
-			echo "création du socket échouée :" . socket_strerror(socket_last_error()) . "<br>";
-		}
 		
-		$result = socket_connect($socket, $ip, $port);
-
-		if($result == false)
-		{
-			echo "socket_connect() échoué : ($result)" . socket_strerror(socket_last_error($socket)) . "<br>";
-		}
-		else
-		{
-			echo "Connexion réussie.";
-
-			echo "Réponse serveur :\n\n";
-
-			$out = socket_read($socket, 200, PHP_BINARY_READ);
-
-			echo $out;
-			echo "<br>";
-		}
+		$result = socket_connect($this->_socket, $ip, $port);
 	}
 
 	public function sendMsg($message)
 	{
 		try
 		{
-			socket_write($socket, $message, strlen($message));	
+			socket_write($this->_socket, $message, strlen($message));	
 		}
 		catch(Exception $e)
 		{
 			die($e->getMessage());
 		}
+
+		$req = $this->_bdd->prepare('INSERT INTO `HistoCommande` (`User`, `Commande`) VALUES ("'.$this->_login.'", "'.$message.'") ');
+
+		$req->execute();
 	}
 	
-
+	public function getSocket()
+	{
+		return $this->_socket;
+	}
 }

@@ -2,15 +2,15 @@
 
 require('model.php');       //On appelle la page qui contient toutes les fonctions 
 
-define('SQL_DSN', 'mysql:host=192.168.64.227;dbname=TPCamera');
-define('SQL_USERNAME', 'root');
-define('SQL_PASSWORD', 'root');
+$SQL_DSN = "mysql:host=192.168.64.227;dbname=TPCamera";
+$SQL_USERNAME ="root";
+$SQL_PASSWORD = "root";
 
 if(isset($_POST['login']) && isset($_POST['passwd']))       //Quand l'utilisateur valide le formulaire de connexion, on vérifie que les identifiants rentrés en base existent
 {
     $user = new utilisateur($_POST["login"],$_POST["passwd"]);
 
-    $user->Connexion(SQL_DSN, SQL_USERNAME, SQL_PASSWORD);
+    $user->Connexion($SQL_DSN, $SQL_USERNAME, $SQL_PASSWORD);
 
     if($user->Autorisation() == true)       //Si oui, on met en place des variables de session et on l'envoie sur la page accueil
     {

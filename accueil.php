@@ -3,9 +3,6 @@ session_start();
 
 require('model.php');
 
-$adresse = "192.168.64.99";
-$port = 9213;
-
 if(!isset($_SESSION['login']))
 {
 	header("Location: index.php");
@@ -13,12 +10,21 @@ if(!isset($_SESSION['login']))
 
 $user = new utilisateur($_SESSION['login'], $_SESSION['passwd']);
 
-define('SQL_DSN', 'mysql:host=192.168.64.227;dbname=TPCamera');
-define('SQL_USERNAME', 'root');
-define('SQL_PASSWORD', 'root');
+$SQL_DSN = "mysql:host=192.168.64.227;dbname=TPCamera";
+$SQL_USERNAME ="root";
+$SQL_PASSWORD = "root";
 
-$user->Connexion(SQL_DSN, SQL_USERNAME, SQL_PASSWORD);
+$adresse = "192.168.64.99";
+$port = 9213;
+
+$user->Connexion($SQL_DSN, $SQL_USERNAME, $SQL_PASSWORD);
 $user->socket($adresse, $port);
+
+if(!empty($_GET['dir']))
+{	
+	$user->sendMsg($_GET['dir']);
+	unset($_GET);
+}
 
 ?>
 
@@ -29,12 +35,9 @@ $user->socket($adresse, $port);
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <script src="dist/js/bootstrap.min.js"></script>
         <link href="css/bootstrap.min.css" rel="stylesheet">
-        <link href="css/sticky-footer-navbar.css" rel="stylesheet">
-        <link href="test.css" rel="stylesheet"/>
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" 
-        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin=""/>
-        <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
-        integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==" crossorigin=""></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script src="https://code.jquery.com/jquery.min.js"></script>
+		<script src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
 
         <title>BIG EYE</title>
             
@@ -71,48 +74,116 @@ $user->socket($adresse, $port);
                 	</form>
               	</div>
         	</nav>
-        
-          
+                  
       	</header>
-	
 
 		<table> Déplacement
-      	<tr>
-			<td with="50px" ></td><td><button onclick="<?php sendMsg("haut"); ?>"> ↑ </button></td></tr>
-			<tr><td><button onclick="" > ← </button></td>	<td><button onclick="" > STOP </button></td>	<td><button onclick=""> → </button></td></tr>
-			<tr><td with="50px" ></td><td><button onclick=""> ↓ </button></td>
-		</tr>
+			<tr>
+				<td with="50px" ></td>
+				<td>
+					<form method="GET" action="accueil.php">
+					<input type="hidden" name="dir" value="dh" />
+						<input type="button" value="↑" id="BoutonDH" onclick="this.form.submit(); return false;" />
+					</form>
+				</td>
+			</tr>
+				
+			<tr>
+				<td>
+					<form method="GET" action="accueil.php">
+						<input type="hidden" name="dir" value="dg" />
+						<input type="button" value="←" id="BoutonDG" onclick="this.form.submit(); return false;" />
+					</form>
+				</td>
+
+				<td>
+					<form method="GET" action="accueil.php">
+						<input type="hidden" name="dir" value="ds" />
+						<input type="button" value="STOP" id="BoutonDS" onclick="this.form.submit(); return false;" />
+					</form>
+				</td>
+				
+				<td>
+					<form method="GET" action="accueil.php">
+						<input type="hidden" name="dir" value="dd" />
+						<input type="button" value="→" id="BoutonDD" onclick="this.form.submit(); return false;" />
+					</form>
+				</td>
+			</tr>
+				
+			<tr>
+				<td with="50px" ></td>
+				<td>
+					<form method="GET" action="accueil.php">
+						<input type="hidden" name="dir" value="db" />
+						<input type="button" value="↓" id="BoutonDB" onclick="this.form.submit(); return false;" />
+					</form>
+				</td>
+			</tr>
 		</table>
 
 		<table> Zoom
-		<tr>
-			<td><button onclick="" >+</button></td><td><button onclick="" >STOP</button></td><td><button onclick="" >-</button></td>
-		</tr>
+			<tr>
+				<td>
+					<form method="GET">
+						<input type="hidden" name="dir" value="zp" />
+						<input type="button" value="+" id="BoutonZP" onclick="this.form.submit(); return false;" />
+					</form>
+				</td>
+				<td>
+					<form method="GET">
+						<input type="hidden" name="dir" value="zs" />
+						<input type="button" value="STOP" id="BoutonZS" onclick="this.form.submit(); return false;" />
+					</form>
+				</td>
+				<td>
+					<form method="GET">
+						<input type="hidden" name="dir" value="zm" />
+						<input type="button" value="-" id="BoutonZM" onclick="this.form.submit(); return false;" />
+					</form>
+				</td>
+			</tr>
 		</table>
 
 		<table> Balayage
-		<tr>
-			<td><button onclick="" >Automatique</button>
-		</tr>
+			<tr>
+				<td>
+					<form method="GET">
+						<input type="hidden" name="dir" value="ba" />
+						<input type="button" value="Automatique" id="BoutonBA" onclick="this.form.submit(); return false;" />
+					</form>
+				</td>
+			</tr>
 		</table>
 
 		<table> Remise à zero
-		<tr>
-			<td><button onclick="" >Ω</button>
-		</tr>
+			<tr>
+				<td>
+					<form method="GET">
+						<input type="hidden" name="dir" value="ho" />
+						<input type="button" value="Ω" id="BoutonHO" onclick="this.form.submit(); return false;" />
+					</form>
+				</td>
+			</tr>
 		</table>
-		
-		<?php function send() {
-			echo 'I just ran a php function';
-		}
-		?>
-		<button onclick=send()> oui </button>
 
-		<div>
-			<?php			
-			//INSERT INTO `HistoCommande`(`User`, `Commande`, `Heure`) VALUES ($_SESSION['login'],$commande,date('Y-m-d H:i:s'))   
-			?>
-		</div>	
+		<table> ON / OFF
+			<tr>
+				<td>
+					<form method="GET">
+						<input type="hidden" name="dir" value="on" />
+						<input type="button" value="ON" id="BoutonON" onclick="this.form.submit(); return false;" />
+					</form>
+				</td>
+
+				<td>
+					<form method="GET">
+						<input type="hidden" name="dir" value="of" />
+						<input type="button" value="OFF" id="BoutonOFF" onclick="this.form.submit(); return false;" />
+					</form>
+				</td>
+			</tr>
+		</table>	
 				
     </body>
 </html>
